@@ -3,6 +3,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Credentials } from '@/types/workflow';
 import { testN8nConnection } from '@/lib/n8n-api';
+import { LogsPanel } from './LogsPanel';
+import { useLogs } from '@/hooks/useLogs';
 import { Key, Server, Zap, CheckCircle, XCircle, Loader2, Eye, EyeOff } from 'lucide-react';
 
 interface CredentialsSetupProps {
@@ -24,6 +26,7 @@ export function CredentialsSetup({ onSave, initialCredentials }: CredentialsSetu
     gemini: false,
     n8n: false,
   });
+  const { logs, clearLogs, info, success, error, warning } = useLogs();
 
   const handleTest = async () => {
     if (!credentials.n8nUrl || !credentials.n8nApiKey) return;
@@ -31,10 +34,27 @@ export function CredentialsSetup({ onSave, initialCredentials }: CredentialsSetu
     setTesting(true);
     setTestResult(null);
     
+    info('Testando conexão com n8n...', `URL: ${credentials.n8nUrl}`);
+    
     try {
-      const success = await testN8nConnection(credentials.n8nUrl, credentials.n8nApiKey);
-      setTestResult(success ? 'success' : 'error');
-    } catch {
+      const result = await testN8nConnection(credentials.n8nUrl, credentials.n8nApiKey);
+      
+      if (result.success) {
+        success('Conexão com n8n estabelecida!', `Status: ${result.status}`);
+        setTestResult('success');
+      } else {
+        error('Falha ao conectar com n8n', result.error);
+        if (result.error?.includes('CORS') || result.error?.includes('Failed to fetch')) {
+          warning(
+            'Erro de CORS detectado',
+            'O n8n está bloqueando requisições do navegador.\n\nSoluções:\n1. Configure CORS no n8n adicionando este header:\n   N8N_EDITOR_BASE_URL=<sua-url>\n   WEBHOOK_URL=<sua-url>\n\n2. Ou use um proxy/backend para fazer as requisições'
+          );
+        }
+        setTestResult('error');
+      }
+    } catch (e) {
+      const errorMessage = e instanceof Error ? e.message : 'Erro desconhecido';
+      error('Erro ao testar conexão', errorMessage);
       setTestResult('error');
     } finally {
       setTesting(false);
@@ -43,13 +63,15 @@ export function CredentialsSetup({ onSave, initialCredentials }: CredentialsSetu
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    info('Salvando credenciais...');
     onSave(credentials);
+    success('Credenciais salvas com sucesso!');
   };
 
   const isValid = credentials.geminiApiKey && credentials.n8nUrl && credentials.n8nApiKey;
 
   return (
-    <div className="w-full max-w-lg mx-auto slide-up">
+    <div className="w-full max-w-lg mx-auto slide-up space-y-4">
       <div className="gradient-card rounded-2xl border border-border p-8">
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl gradient-primary mb-4">
@@ -178,6 +200,9 @@ export function CredentialsSetup({ onSave, initialCredentials }: CredentialsSetu
           </Button>
         </form>
       </div>
+
+      {/* Logs Panel */}
+      <LogsPanel logs={logs} onClear={clearLogs} />
     </div>
   );
 }
