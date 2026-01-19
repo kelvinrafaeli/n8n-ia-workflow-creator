@@ -6,7 +6,7 @@ export interface TestConnectionResult {
   error?: string;
 }
 
-const PROXY_URL = 'http://localhost:5555/proxy/n8n';
+const PROXY_URL = '/proxy/n8n';
 
 export async function testN8nConnection(baseUrl: string, apiKey: string): Promise<TestConnectionResult> {
   try {

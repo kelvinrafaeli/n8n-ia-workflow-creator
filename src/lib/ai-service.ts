@@ -3,7 +3,7 @@ import { N8N_SYSTEM_PROMPT } from './n8n-skills';
 
 const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
 const OPENAI_API_URL = 'https://api.openai.com/v1/chat/completions';
-const PROXY_URL = 'http://localhost:5555/proxy/ai';
+const PROXY_URL = '/proxy/ai';
 
 export async function generateWorkflow(
     credentials: Credentials,
