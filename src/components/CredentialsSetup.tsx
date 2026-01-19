@@ -50,7 +50,7 @@ export function CredentialsSetup({ onSave, initialCredentials }: CredentialsSetu
         if (result.error?.includes('CORS') || result.error?.includes('Failed to fetch')) {
           warning(
             'Erro de CORS detectado',
-            'O n8n está bloqueando requisições do navegador.\n\nSoluções:\n1. Configure CORS no n8n adicionando este header:\n   N8N_EDITOR_BASE_URL=<sua-url>\n   WEBHOOK_URL=<sua-url>\n\n2. Ou use um proxy backend (o backend já deve estar rodando em :5000)'
+            'O n8n está bloqueando requisições do navegador.\n\nSoluções:\n1. Configure CORS no n8n adicionando este header:\n   N8N_EDITOR_BASE_URL=<sua-url>\n   WEBHOOK_URL=<sua-url>\n\n2. Ou use um proxy backend (o backend já deve estar rodando em :5555)'
           );
         }
         setTestResult('error');
@@ -95,8 +95,8 @@ export function CredentialsSetup({ onSave, initialCredentials }: CredentialsSetu
               <button
                 type="button"
                 className={`flex-1 py-1.5 text-xs font-medium rounded-md transition-all ${credentials.aiProvider === 'gemini'
-                    ? 'bg-primary text-primary-foreground shadow-sm'
-                    : 'text-muted-foreground hover:text-foreground'
+                  ? 'bg-primary text-primary-foreground shadow-sm'
+                  : 'text-muted-foreground hover:text-foreground'
                   }`}
                 onClick={() => setCredentials({ ...credentials, aiProvider: 'gemini' })}
               >
@@ -105,8 +105,8 @@ export function CredentialsSetup({ onSave, initialCredentials }: CredentialsSetu
               <button
                 type="button"
                 className={`flex-1 py-1.5 text-xs font-medium rounded-md transition-all ${credentials.aiProvider === 'openai'
-                    ? 'bg-primary text-primary-foreground shadow-sm'
-                    : 'text-muted-foreground hover:text-foreground'
+                  ? 'bg-primary text-primary-foreground shadow-sm'
+                  : 'text-muted-foreground hover:text-foreground'
                   }`}
                 onClick={() => setCredentials({ ...credentials, aiProvider: 'openai' })}
               >

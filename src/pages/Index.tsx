@@ -66,8 +66,10 @@ const Index = () => {
               </div>
             )
           ) : (
-            <div className="container mx-auto px-4 py-16 overflow-y-auto h-full">
-              <CredentialsSetup onSave={saveCredentials} />
+            <div className="w-full h-full overflow-y-auto custom-scrollbar">
+              <div className="container mx-auto px-4 py-16 min-h-full flex flex-col items-center justify-center">
+                <CredentialsSetup onSave={saveCredentials} />
+              </div>
             </div>
           )}
         </main>

@@ -22,7 +22,7 @@ cd backend
 pip install -r requirements.txt
 python main.py
 ```
-The server will run at `http://localhost:5000`.
+The server will run at `http://localhost:5555`.
 
 ### 2. Frontend
 
@@ -35,7 +35,7 @@ npm install
 # Start development server
 npm run dev
 ```
-The app will be available at `http://localhost:8080`.
+The app will be available at `http://localhost:8888`.
 
 ## 🛠️ Technologies Used
 
