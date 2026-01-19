@@ -1,73 +1,55 @@
-# Welcome to your Lovable project
+# n8n Workflow AI ⚡️
 
-## Project info
+Um assistente inteligente projetado para automatizar a criação e edição de workflows do n8n utilizando Inteligência Artificial de última geração.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+## ✨ Funcionalidades
 
-## How can I edit this code?
+- 🤖 **IA Multi-Provedor**: Suporte nativo para Google Gemini e OpenAI.
+- 📂 **Gestão de Histórico**: Sistema de múltiplas sessões de chat para gerenciar diferentes projetos simultaneamente.
+- 🛠️ **Edição Inteligente**: Importe workflows existentes (via busca ou link direto) e peça alterações. A IA analisa a estrutura atual e aplica as mudanças preservando sua lógica original.
+- 🚀 **Deploy Direto**: Crie ou atualize workflows na sua instância n8n com um único clique.
+- 🛡️ **Sanitização de Dados**: Filtros automáticos que removem metadados protegidos do n8n, garantindo deploys sem erros de "additional properties".
+- 🔌 **Proxy Integrado**: Backend em Python para contornar problemas de CORS e gerenciar chaves de API com segurança.
 
-There are several ways of editing your application.
+## 🚀 Como Iniciar
 
-**Use Lovable**
+### 1. Backend (Proxy)
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+O backend é necessário para realizar as chamadas às APIs do n8n, Gemini e OpenAI com segurança.
 
-Changes made via Lovable will be committed automatically to this repo.
+```bash
+cd backend
+pip install -r requirements.txt
+python main.py
+```
+O servidor rodará em `http://localhost:5000`.
 
-**Use your preferred IDE**
+### 2. Frontend
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+Instale as dependências e inicie o ambiente de desenvolvimento:
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+```bash
+# Instalar dependências
+npm install
 
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Iniciar servidor dev
 npm run dev
 ```
+O app estará disponível em `http://localhost:8080`.
 
-**Edit a file directly in GitHub**
+## 🛠️ Tecnologias Utilizadas
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+- **Frontend**: React, Vite, TypeScript, Tailwind CSS, shadcn/ui, Lucide Icons.
+- **Backend**: FastAPI (Python), Requests, Uvicorn.
+- **IA**: Google Gemini API, OpenAI API.
+- **Automação**: n8n Public API.
 
-**Use GitHub Codespaces**
+## ⚙️ Configuração
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+Ao abrir o app, clique em **Configurações** para definir:
+1. Sua instância do n8n (URL e API Key).
+2. Seu provedor de IA preferido (Gemini ou OpenAI) e a respectiva chave de API.
 
-## What technologies are used for this project?
+## 📄 Créditos
 
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+Desenvolvido por **Kelvin Rafaeli**.
