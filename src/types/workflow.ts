@@ -24,10 +24,13 @@ export interface WorkflowNode {
 }
 
 export interface Credentials {
-  geminiApiKey: string;
+  aiProvider: 'gemini' | 'openai';
+  geminiApiKey?: string;
+  openaiApiKey?: string;
   n8nUrl: string;
   n8nApiKey: string;
 }
+
 
 export interface N8nWorkflowResponse {
   id: string;

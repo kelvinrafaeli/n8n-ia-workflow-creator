@@ -15,7 +15,9 @@ interface CredentialsSetupProps {
 export function CredentialsSetup({ onSave, initialCredentials }: CredentialsSetupProps) {
   const [credentials, setCredentials] = useState<Credentials>(
     initialCredentials || {
+      aiProvider: 'gemini',
       geminiApiKey: '',
+      openaiApiKey: '',
       n8nUrl: '',
       n8nApiKey: '',
     }
@@ -24,21 +26,22 @@ export function CredentialsSetup({ onSave, initialCredentials }: CredentialsSetu
   const [testResult, setTestResult] = useState<'success' | 'error' | null>(null);
   const [showKeys, setShowKeys] = useState({
     gemini: false,
+    openai: false,
     n8n: false,
   });
   const { logs, clearLogs, info, success, error, warning } = useLogs();
 
   const handleTest = async () => {
     if (!credentials.n8nUrl || !credentials.n8nApiKey) return;
-    
+
     setTesting(true);
     setTestResult(null);
-    
+
     info('Testando conexão com n8n...', `URL: ${credentials.n8nUrl}`);
-    
+
     try {
       const result = await testN8nConnection(credentials.n8nUrl, credentials.n8nApiKey);
-      
+
       if (result.success) {
         success('Conexão com n8n estabelecida!', `Status: ${result.status}`);
         setTestResult('success');
@@ -47,7 +50,7 @@ export function CredentialsSetup({ onSave, initialCredentials }: CredentialsSetu
         if (result.error?.includes('CORS') || result.error?.includes('Failed to fetch')) {
           warning(
             'Erro de CORS detectado',
-            'O n8n está bloqueando requisições do navegador.\n\nSoluções:\n1. Configure CORS no n8n adicionando este header:\n   N8N_EDITOR_BASE_URL=<sua-url>\n   WEBHOOK_URL=<sua-url>\n\n2. Ou use um proxy/backend para fazer as requisições'
+            'O n8n está bloqueando requisições do navegador.\n\nSoluções:\n1. Configure CORS no n8n adicionando este header:\n   N8N_EDITOR_BASE_URL=<sua-url>\n   WEBHOOK_URL=<sua-url>\n\n2. Ou use um proxy backend (o backend já deve estar rodando em :5000)'
           );
         }
         setTestResult('error');
@@ -68,7 +71,8 @@ export function CredentialsSetup({ onSave, initialCredentials }: CredentialsSetu
     success('Credenciais salvas com sucesso!');
   };
 
-  const isValid = credentials.geminiApiKey && credentials.n8nUrl && credentials.n8nApiKey;
+  const aiKey = credentials.aiProvider === 'gemini' ? credentials.geminiApiKey : credentials.openaiApiKey;
+  const isValid = aiKey && credentials.n8nUrl && credentials.n8nApiKey;
 
   return (
     <div className="w-full max-w-lg mx-auto slide-up space-y-4">
@@ -84,42 +88,108 @@ export function CredentialsSetup({ onSave, initialCredentials }: CredentialsSetu
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Gemini API Key */}
+          {/* Provider Selection */}
           <div className="space-y-2">
-            <label className="text-sm font-medium flex items-center gap-2">
-              <Key className="w-4 h-4 text-primary" />
-              Gemini API Key
-            </label>
-            <div className="relative">
-              <Input
-                type={showKeys.gemini ? 'text' : 'password'}
-                variant="terminal"
-                placeholder="AIza..."
-                value={credentials.geminiApiKey}
-                onChange={(e) =>
-                  setCredentials({ ...credentials, geminiApiKey: e.target.value })
-                }
-              />
+            <label className="text-sm font-medium">Provedor de AI</label>
+            <div className="flex bg-secondary p-1 rounded-lg border border-border">
               <button
                 type="button"
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary transition-colors"
-                onClick={() => setShowKeys({ ...showKeys, gemini: !showKeys.gemini })}
+                className={`flex-1 py-1.5 text-xs font-medium rounded-md transition-all ${credentials.aiProvider === 'gemini'
+                    ? 'bg-primary text-primary-foreground shadow-sm'
+                    : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                onClick={() => setCredentials({ ...credentials, aiProvider: 'gemini' })}
               >
-                {showKeys.gemini ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                Google Gemini
+              </button>
+              <button
+                type="button"
+                className={`flex-1 py-1.5 text-xs font-medium rounded-md transition-all ${credentials.aiProvider === 'openai'
+                    ? 'bg-primary text-primary-foreground shadow-sm'
+                    : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                onClick={() => setCredentials({ ...credentials, aiProvider: 'openai' })}
+              >
+                OpenAI GPT
               </button>
             </div>
-            <p className="text-xs text-muted-foreground">
-              Obtenha em{' '}
-              <a
-                href="https://aistudio.google.com/apikey"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary hover:underline"
-              >
-                Google AI Studio
-              </a>
-            </p>
           </div>
+
+          {/* AI API Key */}
+          {credentials.aiProvider === 'gemini' ? (
+            <div className="space-y-2 slide-in">
+              <label className="text-sm font-medium flex items-center gap-2">
+                <Key className="w-4 h-4 text-primary" />
+                Gemini API Key
+              </label>
+              <div className="relative">
+                <Input
+                  type={showKeys.gemini ? 'text' : 'password'}
+                  variant="terminal"
+                  placeholder="AIza..."
+                  value={credentials.geminiApiKey}
+                  onChange={(e) =>
+                    setCredentials({ ...credentials, geminiApiKey: e.target.value })
+                  }
+                />
+                <button
+                  type="button"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary transition-colors"
+                  onClick={() => setShowKeys({ ...showKeys, gemini: !showKeys.gemini })}
+                >
+                  {showKeys.gemini ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Obtenha em{' '}
+                <a
+                  href="https://aistudio.google.com/apikey"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary hover:underline"
+                >
+                  Google AI Studio
+                </a>
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-2 slide-in">
+              <label className="text-sm font-medium flex items-center gap-2">
+                <Key className="w-4 h-4 text-primary" />
+                OpenAI API Key
+              </label>
+              <div className="relative">
+                <Input
+                  type={showKeys.openai ? 'text' : 'password'}
+                  variant="terminal"
+                  placeholder="sk-..."
+                  value={credentials.openaiApiKey}
+                  onChange={(e) =>
+                    setCredentials({ ...credentials, openaiApiKey: e.target.value })
+                  }
+                />
+                <button
+                  type="button"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary transition-colors"
+                  onClick={() => setShowKeys({ ...showKeys, openai: !showKeys.openai })}
+                >
+                  {showKeys.openai ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Obtenha em{' '}
+                <a
+                  href="https://platform.openai.com/api-keys"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary hover:underline"
+                >
+                  OpenAI Dashboard
+                </a>
+              </p>
+            </div>
+          )}
+
 
           {/* n8n URL */}
           <div className="space-y-2">

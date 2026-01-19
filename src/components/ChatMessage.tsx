@@ -30,18 +30,41 @@ export function ChatMessage({ message, onDeploy }: ChatMessageProps) {
     return content;
   };
 
+  const renderContent = (content: string) => {
+    const text = formatContent(content);
+    // Simple markdown link parser for [text](url)
+    const parts = text.split(/(\[.*?\]\(.*?\))/g);
+
+    return parts.map((part, i) => {
+      const match = part.match(/\[(.*?)\]\((.*?)\)/);
+      if (match) {
+        return (
+          <a
+            key={i}
+            href={match[2]}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-primary hover:underline inline-flex items-center gap-1 font-medium bg-primary/10 px-2 py-0.5 rounded-md"
+          >
+            {match[1]}
+            <Rocket className="w-3 h-3" />
+          </a>
+        );
+      }
+      return <span key={i}>{part}</span>;
+    });
+  };
+
   return (
     <div
-      className={`flex gap-4 slide-up ${
-        isUser ? 'flex-row-reverse' : ''
-      }`}
+      className={`flex gap-4 slide-up ${isUser ? 'flex-row-reverse' : ''
+        }`}
     >
       <div
-        className={`flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center ${
-          isUser
+        className={`flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center ${isUser
             ? 'bg-secondary'
             : 'gradient-primary'
-        }`}
+          }`}
       >
         {isUser ? (
           <User className="w-5 h-5 text-secondary-foreground" />
@@ -51,20 +74,18 @@ export function ChatMessage({ message, onDeploy }: ChatMessageProps) {
       </div>
 
       <div
-        className={`flex-1 max-w-[80%] space-y-3 ${
-          isUser ? 'text-right' : ''
-        }`}
+        className={`flex-1 max-w-[80%] space-y-3 ${isUser ? 'text-right' : ''
+          }`}
       >
         <div
-          className={`inline-block rounded-2xl px-4 py-3 ${
-            isUser
+          className={`inline-block rounded-2xl px-4 py-3 ${isUser
               ? 'bg-primary text-primary-foreground rounded-tr-sm'
-              : 'bg-card border border-border rounded-tl-sm'
-          }`}
+              : 'bg-card border border-border rounded-tl-sm shadow-sm'
+            }`}
         >
-          <p className="text-sm whitespace-pre-wrap text-left">
-            {formatContent(message.content)}
-          </p>
+          <div className="text-sm whitespace-pre-wrap text-left leading-relaxed">
+            {renderContent(message.content)}
+          </div>
         </div>
 
         {message.workflow && (
