@@ -1,55 +1,55 @@
 # n8n Workflow AI ⚡️
 
-Um assistente inteligente projetado para automatizar a criação e edição de workflows do n8n utilizando Inteligência Artificial de última geração.
+An intelligent assistant designed to automate the creation and editing of n8n workflows using state-of-the-art Artificial Intelligence.
 
-## ✨ Funcionalidades
+## ✨ Features
 
-- 🤖 **IA Multi-Provedor**: Suporte nativo para Google Gemini e OpenAI.
-- 📂 **Gestão de Histórico**: Sistema de múltiplas sessões de chat para gerenciar diferentes projetos simultaneamente.
-- 🛠️ **Edição Inteligente**: Importe workflows existentes (via busca ou link direto) e peça alterações. A IA analisa a estrutura atual e aplica as mudanças preservando sua lógica original.
-- 🚀 **Deploy Direto**: Crie ou atualize workflows na sua instância n8n com um único clique.
-- 🛡️ **Sanitização de Dados**: Filtros automáticos que removem metadados protegidos do n8n, garantindo deploys sem erros de "additional properties".
-- 🔌 **Proxy Integrado**: Backend em Python para contornar problemas de CORS e gerenciar chaves de API com segurança.
+- 🤖 **Multi-Provider AI**: Native support for Google Gemini and OpenAI.
+- 📂 **Chat History Management**: Multi-session chat system to manage different projects simultaneously.
+- 🛠️ **Smart Editing**: Import existing workflows (via search or direct link) and request changes. The AI analyzes the current structure and applies changes while preserving the original logic.
+- 🚀 **Direct Deploy**: Create or update workflows in your n8n instance with a single click.
+- 🛡️ **Data Sanitization**: Automatic filters that remove protected n8n metadata, ensuring error-free deploys by avoiding "additional properties" issues.
+- 🔌 **Integrated Proxy**: Python-based backend to bypass CORS issues and securely manage API keys.
 
-## 🚀 Como Iniciar
+## 🚀 Getting Started
 
 ### 1. Backend (Proxy)
 
-O backend é necessário para realizar as chamadas às APIs do n8n, Gemini e OpenAI com segurança.
+The backend is required to securely proxy requests to the n8n, Gemini, and OpenAI APIs.
 
 ```bash
 cd backend
 pip install -r requirements.txt
 python main.py
 ```
-O servidor rodará em `http://localhost:5000`.
+The server will run at `http://localhost:5000`.
 
 ### 2. Frontend
 
-Instale as dependências e inicie o ambiente de desenvolvimento:
+Install dependencies and start the development environment:
 
 ```bash
-# Instalar dependências
+# Install dependencies
 npm install
 
-# Iniciar servidor dev
+# Start development server
 npm run dev
 ```
-O app estará disponível em `http://localhost:8080`.
+The app will be available at `http://localhost:8080`.
 
-## 🛠️ Tecnologias Utilizadas
+## 🛠️ Technologies Used
 
 - **Frontend**: React, Vite, TypeScript, Tailwind CSS, shadcn/ui, Lucide Icons.
 - **Backend**: FastAPI (Python), Requests, Uvicorn.
-- **IA**: Google Gemini API, OpenAI API.
-- **Automação**: n8n Public API.
+- **AI**: Google Gemini API, OpenAI API.
+- **Automation**: n8n Public API.
 
-## ⚙️ Configuração
+## ⚙️ Configuration
 
-Ao abrir o app, clique em **Configurações** para definir:
-1. Sua instância do n8n (URL e API Key).
-2. Seu provedor de IA preferido (Gemini ou OpenAI) e a respectiva chave de API.
+Once the app is open, click on **Settings** to configure:
+1. Your n8n instance (URL and API Key).
+2. Your preferred AI provider (Gemini or OpenAI) and the respective API key.
 
-## 📄 Créditos
+## 📄 Credits
 
-Desenvolvido por **Kelvin Rafaeli**.
+Developed by **Kelvin Rafaeli**.
